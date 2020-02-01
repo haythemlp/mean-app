@@ -1,26 +1,67 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import LoginComponent from './components/login';
+import RegisterComponent from './components/register';
+import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
+import Auth from './Services/Auth'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+//import history from './Services/History';
+
+
+function AppPage(props) {
+    console.log(props)
+
+
+    if (props.status) {
+        return <Redirect to="/login"/>
+
+
+    }
+    return <h1>hello </h1>
+
 }
 
-export default App;
+
+export default class App extends Component {
+    state = {notAuthenticated: false};
+
+    UNSAFE_componentWillMount() {
+        Auth.isAuthenticated().then(data => {
+
+
+            this.setState({notAuthenticated: !data})
+
+        })
+    }
+
+    render() {
+
+        return (
+            <div className="App">
+                <Router>
+                    <Switch>
+                        <Route path="/login">
+                            <LoginComponent/>
+                        </Route>
+                        <Route path="/register">
+                            <RegisterComponent/>
+                        </Route>
+
+                        <Route path="/app">
+                            <AppPage status={this.state.notAuthenticated}/>
+
+
+                        </Route>
+                        <Route path="/">
+                            <Redirect to="/app"/>
+                        </Route>
+                    </Switch>
+
+                </Router>
+            </div>
+        )
+
+
+    }
+}
+
