@@ -2,43 +2,42 @@ import React, {Component} from 'react';
 import './App.css';
 import LoginComponent from './components/login';
 import RegisterComponent from './components/register';
-import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
+import {Redirect, Route, Router, Switch} from "react-router-dom";
 import Auth from './Services/Auth'
 
-//import history from './Services/History';
+import history from './lib/history';
 
 
-function AppPage(props) {
-    console.log(props)
+class AppPage extends Component {
 
 
-    if (props.status) {
-        return <Redirect to="/login"/>
+    UNSAFE_componentWillMount() {
+        Auth.isAuthenticated().then(data => {
 
+        }).catch(() => {
+            localStorage.clear()
+            history.push('/login')
 
+        })
     }
-    return <h1>hello </h1>
+
+
+    render() {
+
+        return <h1>hello </h1>
+    }
+
 
 }
 
 
 export default class App extends Component {
-    state = {notAuthenticated: false};
-
-    UNSAFE_componentWillMount() {
-        Auth.isAuthenticated().then(data => {
-
-
-            this.setState({notAuthenticated: !data})
-
-        })
-    }
 
     render() {
 
         return (
             <div className="App">
-                <Router>
+                <Router history={history}>
                     <Switch>
                         <Route path="/login">
                             <LoginComponent/>
@@ -48,7 +47,7 @@ export default class App extends Component {
                         </Route>
 
                         <Route path="/app">
-                            <AppPage status={this.state.notAuthenticated}/>
+                            <AppPage/>
 
 
                         </Route>

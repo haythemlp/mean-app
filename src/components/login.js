@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import history from "../lib/history";
+
+import authService from '../Services/Auth';
 
 function Copyright() {
     return (
@@ -49,19 +52,20 @@ const useStyles = makeStyles(theme => ({
 function mySubmitHandler(e) {
     e.preventDefault();
 
-    var formData = new FormData(e.target);
+    const formData = new FormData(e.target);
+    authService.login(Object.fromEntries(formData)).then((res) => {
+        localStorage.setItem('token', res.data.token);
+        console.log(localStorage.getItem('token'));
+        return history.push('/app');
 
-    fetch('myapi', {
-        method: "POST",
-        body: formData
-})
+    })
+
 
 }
 
 export default function SignIn() {
-
-
-    const classes = useStyles();
+ const classes = useStyles();
+    if (localStorage.getItem('token'))  history.push('/app');
 
     return (
         <Container component="main" maxWidth="xs">

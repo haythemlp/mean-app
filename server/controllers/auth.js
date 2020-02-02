@@ -16,12 +16,14 @@ router.post('/register', function (req, res) {
 });
 
 router.post('/login', function (req, res) {
+    console.log(req.body);
 
     passport.authenticate('local', {session: false}, (err, user, info) => {
         if (err || !user) {
             return res.status(400).json({
                 message: 'Something is not right',
-                user: user
+                user: user,
+                error:err
             });
         }
         req.login(user, {session: false}, (err) => {
