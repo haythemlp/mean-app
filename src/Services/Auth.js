@@ -2,8 +2,8 @@ import httpService from './Http'
 
 export default class Auth {
 
-    static  isAuthenticated() {
-        return  httpService.get('auth/profile');
+    static isAuthenticated() {
+        return httpService.get('auth/profile');
 
     }
 
@@ -11,11 +11,13 @@ export default class Auth {
 
         return httpService.post('auth/login', data)
     }
-   static async register(data) {
+
+    static async register(data) {
 
         return httpService.post('auth/register', data)
     }
 
 
 }
+
 

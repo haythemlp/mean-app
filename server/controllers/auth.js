@@ -21,9 +21,9 @@ router.post('/login', function (req, res) {
     passport.authenticate('local', {session: false}, (err, user, info) => {
         if (err || !user) {
             return res.status(400).json({
-                message: 'Something is not right',
+                message: 'credentials is not right',
                 user: user,
-                error:err
+                error: err
             });
         }
         req.login(user, {session: false}, (err) => {
@@ -38,7 +38,8 @@ router.post('/login', function (req, res) {
 
 });
 
-router.get('/profile', authMiddleware.authenticated(), function (req, res, next) {
+router.get('/profile', function (req, res, next) {
+    authMiddleware.authenticated(req, res, next)
     res.send(req.user);
 });
 module.exports = router;

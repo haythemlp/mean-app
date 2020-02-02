@@ -55,7 +55,6 @@ function mySubmitHandler(e) {
     const formData = new FormData(e.target);
     authService.login(Object.fromEntries(formData)).then((res) => {
         localStorage.setItem('token', res.data.token);
-        console.log(localStorage.getItem('token'));
         return history.push('/app');
 
     })
